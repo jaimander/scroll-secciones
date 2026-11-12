@@ -4,38 +4,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scroll interactivo</title>
+  <title>Drag Velocity Detector</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <main class="scroll-container" id="scrollContainer">
+  <main class="container">
 
-    <section class="section section-1">
-      <h1>01 — Inicio</h1>
-      <p>
-        Primera sección. Puedes recorrer su contenido
-        haciendo scroll lentamente.
-      </p>
-    </section>
+    <div class="info">
+      <span>VELOCIDAD DEL DRAG</span>
+      <h1 id="velocity">0</h1>
+      <span>PX / SEGUNDO</span>
 
-    <section class="section section-2">
-      <h1>02 — Experiencia</h1>
-      <p>
-        Segunda sección. Un movimiento rápido permite
-        avanzar automáticamente hasta aquí.
-      </p>
-    </section>
+      <div class="status" id="status">
+        Esperando movimiento...
+      </div>
+    </div>
 
-    <section class="section section-3">
-      <h1>03 — Final</h1>
-      <p>
-        Tercera sección. Explora libremente su contenido.
-      </p>
-    </section>
+    <div class="drag-area" id="dragArea">
+      <span>ARRASTRA AQUÍ</span>
+    </div>
 
   </main>
 
-  <script src="script.js"></script>
+  <script>
+    const dragArea = document.getElementById("dragArea");
+    const velocityDisplay = document.getElementById("velocity");
+    const statusDisplay = document.getElementById("status");
+
+    let isDragging = false;
+    let lastY = 0;
+    let lastTime = 0;
+    let velocity = 0;
+
+    const THRESHOLD = 1000;
+
+    function startDrag(y) {
+      isDragging = true;
+      lastY = y;
+      lastTime = performance.now();
+      velocity = 0;
+    }
+
+    function moveDrag(y) {
+      if (!isDragging) return;
+
+      const now = performance.now();
+      const deltaY = y - lastY;
+      const deltaTime = now - lastTime;
+
+      if (deltaTime > 0) {
+        velocity = Math.abs(deltaY / deltaTime) * 1000;
+
+        velocityDisplay.textContent = Math.round(velocity);
+
+        if (velocity > THRESHOLD) {
+          statusDisplay.textContent = "MOVIMIENTO RÁPIDO";
+          statusDisplay.className = "status fast";
+        } else {
+          statusDisplay.textContent = "MOVIMIENTO LENTO";
+          statusDisplay.className = "status slow";
+        }
+      }
+
+      lastY = y;
+      lastTime = now;
+    }
+
+    function endDrag() {
+      isDragging = false;
+      velocity = 0;
+      velocityDisplay.textContent = "0";
+      statusDisplay.textContent = "Drag finalizado";
+      statusDisplay.className = "status";
+    }
+
+    // Mouse
+    dragArea.addEventListener("mousedown", (e) => {
+      startDrag(e.clientY);
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      moveDrag(e.clientY);
+    });
+
+    window.addEventListener("mouseup", endDrag);
+
+    // Touch
+    dragArea.addEventListener("touchstart", (e) => {
+      startDrag(e.touches[0].clientY);
+    }, { passive: true });
+
+    dragArea.addEventListener("touchmove", (e) => {
+      moveDrag(e.touches[0].clientY);
+    }, { passive: true });
+
+    dragArea.addEventListener("touchend", endDrag);
+    dragArea.addEventListener("touchcancel", endDrag);
+
+  </script>
+
 </body>
 </html>
