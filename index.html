@@ -1,18 +1,41 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Contador táctil</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/script.js?v=5" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scroll interactivo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main id="touch-area">
-    <span id="counter">0</span>
+
+  <main class="scroll-container" id="scrollContainer">
+
+    <section class="section section-1">
+      <h1>01 — Inicio</h1>
+      <p>
+        Primera sección. Puedes recorrer su contenido
+        haciendo scroll lentamente.
+      </p>
+    </section>
+
+    <section class="section section-2">
+      <h1>02 — Experiencia</h1>
+      <p>
+        Segunda sección. Un movimiento rápido permite
+        avanzar automáticamente hasta aquí.
+      </p>
+    </section>
+
+    <section class="section section-3">
+      <h1>03 — Final</h1>
+      <p>
+        Tercera sección. Explora libremente su contenido.
+      </p>
+    </section>
+
   </main>
-  <div id="contenedor-img"><img src="assets/cielo.jpg"/></div>
-  
+
+  <script src="script.js"></script>
 </body>
 </html>
