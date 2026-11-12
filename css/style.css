@@ -1,0 +1,51 @@
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+#touch-area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#counter {
+  font-size: clamp(6rem, 25vw, 20rem);
+  font-weight: 300;
+  line-height: 1;
+}
+
+#contenedor-img{
+ width: 100%;
+ height: 100%;
+ position: absolute;
+ top: 0;
+ left: 0;
+ z-index: -1;
+ visibility: hidden;
+}
+
+img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+
+}
+
