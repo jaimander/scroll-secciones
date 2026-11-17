@@ -4,104 +4,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drag Velocity Detector</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Transportadora vertical</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    #transportadora {
+      width: 100%;
+      transform: translateY(0);
+      transition: transform 1s linear;
+    }
+
+    .elemento {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+    }
+  </style>
 </head>
 
 <body>
 
-  <main class="container">
-
-    <div class="info">
-      <span>VELOCIDAD DEL DRAG</span>
-      <h1 id="velocity">0</h1>
-      <span>PX / SEGUNDO</span>
-
-      <div class="status" id="status">
-        Esperando movimiento...
-      </div>
-    </div>
-
-    <div class="drag-area" id="dragArea">
-      <span>ARRASTRA AQUÍ</span>
-    </div>
-
-  </main>
+  <div id="transportadora"></div>
 
   <script>
-    const dragArea = document.getElementById("dragArea");
-    const velocityDisplay = document.getElementById("velocity");
-    const statusDisplay = document.getElementById("status");
+    const transportadora = document.querySelector("#transportadora");
 
-    let isDragging = false;
-    let lastY = 0;
-    let lastTime = 0;
-    let velocity = 0;
+    let posicion = 0;
 
-    const THRESHOLD = 1000;
-
-    function startDrag(y) {
-      isDragging = true;
-      lastY = y;
-      lastTime = performance.now();
-      velocity = 0;
+    // Generar color aleatorio
+    function colorAleatorio() {
+      return `hsl(${Math.random() * 360}, 80%, 55%)`;
     }
 
-    function moveDrag(y) {
-      if (!isDragging) return;
+    // Crear un nuevo elemento
+    function crearElemento() {
+      const div = document.createElement("div");
 
-      const now = performance.now();
-      const deltaY = y - lastY;
-      const deltaTime = now - lastTime;
+      div.classList.add("elemento");
+      div.style.backgroundColor = colorAleatorio();
 
-      if (deltaTime > 0) {
-        velocity = Math.abs(deltaY / deltaTime) * 1000;
-
-        velocityDisplay.textContent = Math.round(velocity);
-
-        if (velocity > THRESHOLD) {
-          statusDisplay.textContent = "MOVIMIENTO RÁPIDO";
-          statusDisplay.className = "status fast";
-        } else {
-          statusDisplay.textContent = "MOVIMIENTO LENTO";
-          statusDisplay.className = "status slow";
-        }
-      }
-
-      lastY = y;
-      lastTime = now;
+      transportadora.appendChild(div);
     }
 
-    function endDrag() {
-      isDragging = false;
-      velocity = 0;
-      velocityDisplay.textContent = "0";
-      statusDisplay.textContent = "Drag finalizado";
-      statusDisplay.className = "status";
+    // Crear elementos iniciales
+    crearElemento();
+    crearElemento();
+
+    // Movimiento de la transportadora
+    function moverTransportadora() {
+      posicion++;
+
+      transportadora.style.transform =
+        `translateY(-${posicion * 100}vh)`;
+
+      crearElemento();
     }
 
-    // Mouse
-    dragArea.addEventListener("mousedown", (e) => {
-      startDrag(e.clientY);
-    });
-
-    window.addEventListener("mousemove", (e) => {
-      moveDrag(e.clientY);
-    });
-
-    window.addEventListener("mouseup", endDrag);
-
-    // Touch
-    dragArea.addEventListener("touchstart", (e) => {
-      startDrag(e.touches[0].clientY);
-    }, { passive: true });
-
-    dragArea.addEventListener("touchmove", (e) => {
-      moveDrag(e.touches[0].clientY);
-    }, { passive: true });
-
-    dragArea.addEventListener("touchend", endDrag);
-    dragArea.addEventListener("touchcancel", endDrag);
+    // Velocidad de desplazamiento
+    setInterval(moverTransportadora, 2000);
 
   </script>
 

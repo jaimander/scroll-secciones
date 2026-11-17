@@ -5,87 +5,21 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
-  font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
-body {
-  background: #151515;
-  color: white;
-}
-
-.container {
+#transportadora {
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 50px;
-
-  padding: 30px;
+  transform: translateY(0);
+  transition: transform 1s linear;
 }
 
-.info {
-  text-align: center;
-}
-
-.info span {
-  font-size: 12px;
-  letter-spacing: 3px;
-  color: #999;
-}
-
-.info h1 {
-  font-size: clamp(70px, 15vw, 150px);
-  font-weight: 400;
-  margin: 15px 0;
-  font-variant-numeric: tabular-nums;
-}
-
-.status {
-  margin-top: 25px;
-  font-size: 14px;
-  letter-spacing: 2px;
-  color: #999;
-}
-
-.status.fast {
-  color: #ff5252;
-}
-
-.status.slow {
-  color: #65d6a0;
-}
-
-.drag-area {
+.elemento {
   width: 100%;
-  max-width: 500px;
-  height: 200px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #555;
-  border-radius: 12px;
-
-  background: #252525;
-  color: #fff;
-
-  font-size: 13px;
-  letter-spacing: 3px;
-
-  cursor: grab;
-  user-select: none;
-  touch-action: none;
-}
-
-.drag-area:active {
-  cursor: grabbing;
-  background: #303030;
+  height: 100vh;
+  height: 100dvh;
 }

@@ -1,111 +1,36 @@
 
-const container = document.getElementById("scrollContainer");
-const sections = [...document.querySelectorAll(".section")];
+const transportadora = document.querySelector("#transportadora");
 
-let currentSection = 0;
-let isAnimating = false;
+let posicion = 0;
 
-let wheelTimer;
-let wheelDelta = 0;
-
-const VELOCITY_THRESHOLD = 35;
-const ANIMATION_DURATION = 850;
-
-// Detectar sección actual
-function updateCurrentSection() {
-  if (isAnimating) return;
-
-  const position = container.scrollTop;
-
-  let closest = 0;
-  let minDistance = Infinity;
-
-  sections.forEach((section, index) => {
-    const distance = Math.abs(section.offsetTop - position);
-
-    if (distance < minDistance) {
-      minDistance = distance;
-      closest = index;
-    }
-  });
-
-  currentSection = closest;
+// Generar color aleatorio
+function colorAleatorio() {
+  return `hsl(${Math.random() * 360}, 80%, 55%)`;
 }
 
-// Navegación entre secciones
-function goToSection(index) {
-  if (
-    index < 0 ||
-    index >= sections.length ||
-    isAnimating
-  ) return;
+// Crear un nuevo elemento
+function crearElemento() {
+  const div = document.createElement("div");
 
-  isAnimating = true;
-  currentSection = index;
+  div.classList.add("elemento");
+  div.style.backgroundColor = colorAleatorio();
 
-  container.scrollTo({
-    top: sections[index].offsetTop,
-    behavior: "smooth"
-  });
-
-  setTimeout(() => {
-    isAnimating = false;
-  }, ANIMATION_DURATION);
+  transportadora.appendChild(div);
 }
 
-// Detectar scroll con rueda
-container.addEventListener("wheel", (e) => {
-  if (isAnimating) {
-    e.preventDefault();
-    return;
-  }
+// Crear elementos iniciales
+crearElemento();
+crearElemento();
 
-  wheelDelta += e.deltaY;
+// Movimiento de la transportadora
+function moverTransportadora() {
+  posicion++;
 
-  clearTimeout(wheelTimer);
+  transportadora.style.transform =
+    `translateY(-${posicion * 100}vh)`;
 
-  wheelTimer = setTimeout(() => {
-    const velocity = Math.abs(wheelDelta);
+  crearElemento();
+}
 
-    if (velocity > VELOCITY_THRESHOLD) {
-      if (wheelDelta > 0) {
-        goToSection(currentSection + 1);
-      } else {
-        goToSection(currentSection - 1);
-      }
-    }
-
-    wheelDelta = 0;
-  }, 100);
-
-}, { passive: true });
-
-// Detectar drag táctil
-let touchStartY = 0;
-let touchStartTime = 0;
-
-container.addEventListener("touchstart", (e) => {
-  touchStartY = e.touches[0].clientY;
-  touchStartTime = Date.now();
-}, { passive: true });
-
-container.addEventListener("touchend", (e) => {
-  if (isAnimating) return;
-
-  const touchEndY = e.changedTouches[0].clientY;
-  const distance = touchStartY - touchEndY;
-  const elapsed = Date.now() - touchStartTime;
-
-  const velocity = Math.abs(distance) / Math.max(elapsed, 1);
-
-  if (velocity > 0.6 && Math.abs(distance) > 40) {
-    if (distance > 0) {
-      goToSection(currentSection + 1);
-    } else {
-      goToSection(currentSection - 1);
-    }
-  }
-}, { passive: true });
-
-// Actualizar sección durante scroll libre
-container.addEventListener("scroll", updateCurrentSection);
+// Velocidad de desplazamiento
+setInterval(moverTransportadora, 2000);
